@@ -22,7 +22,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
       if (error.code == "P2002") {
         return res.status(409).json({ error: "Record already exists" });
       }
-      break;
+    // eslint-disable-next-line no-fallthrough
     default:
       console.error("[errorHandler]", {
         method: req.method,
