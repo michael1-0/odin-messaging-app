@@ -6,15 +6,24 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Login from "./pages/Login.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import { GuestRoute, ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Home />} />
-          <Route path="*" element={<NotFound />} />
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
         </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<App />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

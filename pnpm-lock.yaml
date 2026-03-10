@@ -104,6 +104,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@repo/zod-validations':
+        specifier: workspace:*
+        version: link:../../packages/zod-validations
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.1(@types/node@24.10.11)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
