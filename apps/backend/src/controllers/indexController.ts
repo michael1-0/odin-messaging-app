@@ -52,7 +52,7 @@ async function postLogin(req: Request, res: Response, next: NextFunction) {
       iat: Math.floor(Date.now() / 1000),
     };
     const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || "secret", {
-      expiresIn: "1h",
+      expiresIn: "8h",
     });
 
     return res.json({ token: token });
