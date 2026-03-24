@@ -30,6 +30,7 @@ function Home() {
 
   function handleMessageSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!messageInput) return;
     socketRef.current?.emit("global chat", messageInput);
     setMessageInput("");
   }
@@ -56,8 +57,9 @@ function Home() {
                   }
                   key={index}
                 >
-                  <p className="text-sm font-semibold">
-                    {message.username ?? message.userId}
+                  <p className="text-xs font-semibold">
+                    {(message.username ?? "User") +
+                      ` with an id of ${message.userId}`}
                   </p>
                   <p className="text-base">{message.content}</p>
                 </div>
