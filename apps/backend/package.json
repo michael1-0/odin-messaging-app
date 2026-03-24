@@ -8,7 +8,9 @@
     "build": "tsc --build",
     "start": "node ./dist/server.js",
     "lint": "eslint .",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "check": "pnpm lint && pnpm format:check && pnpm build"
   },
   "type": "module",
   "packageManager": "pnpm@10.28.2",
