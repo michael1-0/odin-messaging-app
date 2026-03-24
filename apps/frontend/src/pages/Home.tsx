@@ -3,12 +3,12 @@ import { io, Socket } from "socket.io-client";
 import Sidebar from "../components/Sidebar";
 
 type Message = {
+  userId: number;
   content: string;
-  userId: string;
 };
 
 function Home() {
-  const currentUserId = localStorage.getItem("userId");
+  const currentUserId = Number(localStorage.getItem("userId"));
   const socketRef = useRef<Socket | null>(null);
   const [messageInput, setMessageInput] = useState<string>("");
   const [messages, setMessages] = useState<Array<Message>>([]);

@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
 
     io.emit("global chat", {
       content: message,
-      userId: String(userId),
+      userId,
     });
   });
 
