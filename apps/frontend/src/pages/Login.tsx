@@ -34,6 +34,7 @@ function Login() {
       }
       
       localStorage.setItem("token", data.token!);
+      localStorage.setItem("userId", data.userId!)
       navigate("/");
     } catch {
       setError("Something went wrong. Please try again.");

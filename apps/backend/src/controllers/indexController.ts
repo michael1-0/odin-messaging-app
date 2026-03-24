@@ -24,7 +24,7 @@ async function postSignup(req: Request, res: Response, next: NextFunction) {
       expiresIn: "8h",
     });
 
-    return res.json({ token: token });
+    return res.json({ token: token, userId: newUser.id });
   } catch (error) {
     return next(error);
   }
@@ -55,7 +55,7 @@ async function postLogin(req: Request, res: Response, next: NextFunction) {
       expiresIn: "8h",
     });
 
-    return res.json({ token: token });
+    return res.json({ token: token, userId: user.id });
   } catch (error) {
     return next(error);
   }
