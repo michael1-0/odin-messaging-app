@@ -1,6 +1,6 @@
 import z from "zod";
 
-const UserSchema = z.object({
+const LoginSchema = z.object({
   email: z
     .email("Email must be valid")
     .min(3, "Email min length is 3 characters")
@@ -13,8 +13,23 @@ const UserSchema = z.object({
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
 });
-type User = z.infer<typeof UserSchema>;
+
+const SignupSchema = LoginSchema.extend({
+  username: z
+    .string("Username must be valid")
+    .trim()
+    .min(2, "Username must be at least 2 characters long")
+    .max(30, "Username must not exceed 30 characters long"),
+  noteToAll: z
+    .string("Note must be valid")
+    .trim()
+    .max(280, "Note to all must not exceed 280 characters long")
+    .default(""),
+});
+
+type LoginUser = z.infer<typeof LoginSchema>;
+type SignupUser = z.infer<typeof SignupSchema>;
 
 export default z;
-export { UserSchema };
-export type { User };
+export { LoginSchema, SignupSchema };
+export type { LoginUser, SignupUser };

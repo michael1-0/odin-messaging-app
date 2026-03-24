@@ -18,10 +18,12 @@ io.on("connection", (socket) => {
   socket.on("global chat", (message) => {
     const req = socket.request as Request;
     const userId = req.user?.id;
+    const username = req.user?.username;
 
     io.emit("global chat", {
       content: message,
       userId,
+      username,
     });
   });
 

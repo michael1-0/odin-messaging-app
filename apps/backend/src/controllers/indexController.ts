@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import type { LoginUser, SignupUser } from "@repo/zod-validations";
 import { prisma } from "../db/prisma.ts";
 import { AppError } from "../errors/AppError.ts";
 
@@ -9,11 +10,16 @@ function getHealth(req: Request, res: Response) {
 }
 
 async function postSignup(req: Request, res: Response, next: NextFunction) {
-  const body = req.body;
+  const body = req.body as SignupUser;
   try {
     const hash = await bcrypt.hash(body.password, 10);
     const newUser = await prisma.user.create({
-      data: { email: body.email, password: hash },
+      data: {
+        email: body.email,
+        username: body.username,
+        noteToAll: body.noteToAll,
+        password: hash,
+      },
     });
 
     const jwtPayload = {
@@ -24,14 +30,17 @@ async function postSignup(req: Request, res: Response, next: NextFunction) {
       expiresIn: "8h",
     });
 
-    return res.json({ token: token, userId: newUser.id });
+    return res.json({
+      token,
+      userId: newUser.id,
+    });
   } catch (error) {
     return next(error);
   }
 }
 
 async function postLogin(req: Request, res: Response, next: NextFunction) {
-  const body = req.body;
+  const body = req.body as LoginUser;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -55,7 +64,10 @@ async function postLogin(req: Request, res: Response, next: NextFunction) {
       expiresIn: "8h",
     });
 
-    return res.json({ token: token, userId: user.id });
+    return res.json({
+      token,
+      userId: user.id,
+    });
   } catch (error) {
     return next(error);
   }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { UserSchema } from "@repo/zod-validations";
+import { LoginSchema } from "@repo/zod-validations";
 
 function Login() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    const result = UserSchema.safeParse({ email, password });
+    const result = LoginSchema.safeParse({ email, password });
     if (!result.success) {
       setError(result.error.issues[0].message);
       return;

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { UserSchema } from "@repo/zod-validations";
+import { SignupSchema } from "@repo/zod-validations";
 
 function SignUp() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [noteToAll, setNoteToAll] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,7 +15,12 @@ function SignUp() {
     e.preventDefault();
     setError("");
 
-    const result = UserSchema.safeParse({ email, password });
+    const result = SignupSchema.safeParse({
+      username,
+      noteToAll,
+      email,
+      password,
+    });
     if (!result.success) {
       setError(result.error.issues[0].message);
       return;
@@ -24,7 +31,7 @@ function SignUp() {
       const res = await fetch(`${import.meta.env.VITE_API_URL}sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, noteToAll, email, password }),
       });
       const data = await res.json();
 
@@ -58,6 +65,21 @@ function SignUp() {
           )}
 
           <div className="space-y-1">
+            <label htmlFor="username" className="block text-sm font-medium">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full border rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black"
+              placeholder="your nickname"
+            />
+          </div>
+
+          <div className="space-y-1">
             <label htmlFor="email" className="block text-sm font-medium">
               Email
             </label>
@@ -70,6 +92,20 @@ function SignUp() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black"
               placeholder="you@example.com"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label htmlFor="noteToAll" className="block text-sm font-medium">
+              Note to all
+            </label>
+            <textarea
+              id="noteToAll"
+              value={noteToAll}
+              onChange={(e) => setNoteToAll(e.target.value)}
+              className="w-full border rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black"
+              placeholder="Say hi to everyone"
+              rows={3}
             />
           </div>
 

@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 
 type Message = {
   userId: number;
+  username?: string;
   content: string;
 };
 
@@ -19,13 +20,13 @@ function Home() {
       auth: { token },
     });
     socketRef.current.on("global chat", (message) => {
-      setMessages([...messages, message]);
+      setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
       socketRef.current?.disconnect();
     };
-  }, [messages]);
+  }, []);
 
   function handleMessageSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,7 +56,9 @@ function Home() {
                   }
                   key={index}
                 >
-                  <p className="text-sm font-semibold">{message.userId}</p>
+                  <p className="text-sm font-semibold">
+                    {message.username ?? message.userId}
+                  </p>
                   <p className="text-base">{message.content}</p>
                 </div>
               );
