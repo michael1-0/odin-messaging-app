@@ -26,7 +26,7 @@ function SignUp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();      
+      const data = await res.json();
 
       if (!res.ok) {
         setError(data.error ?? "Could not create account");
@@ -34,7 +34,7 @@ function SignUp() {
       }
 
       localStorage.setItem("token", data.token!);
-      localStorage.setItem("userId", data.userId!)
+      localStorage.setItem("userId", data.userId!);
       navigate("/");
     } catch {
       setError("Something went wrong. Please try again.");

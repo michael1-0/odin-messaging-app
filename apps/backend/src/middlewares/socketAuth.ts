@@ -16,4 +16,4 @@ function socketAuth(
   );
 }
 
-export default socketAuth ;
+export default socketAuth;

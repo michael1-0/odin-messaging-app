@@ -49,5 +49,9 @@ export function ProtectedRoute() {
 }
 
 export function GuestRoute() {
-  return localStorage.getItem("token") ? <Navigate to="/" replace /> : <Outlet />;
+  return localStorage.getItem("token") ? (
+    <Navigate to="/" replace />
+  ) : (
+    <Outlet />
+  );
 }
