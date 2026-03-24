@@ -38,7 +38,7 @@ function Home() {
       <div className="flex flex-1 flex-col">
         {/* Chat Header */}
         <header className="flex h-16 items-center px-6">
-          <h2 className="text-xl font-semibold">General Channel</h2>
+          <h2 className="text-xl font-semibold">Global Chat</h2>
         </header>
 
         {/* Message List */}
