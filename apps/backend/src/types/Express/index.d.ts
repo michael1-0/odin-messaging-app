@@ -5,6 +5,7 @@ declare global {
       email: string;
       username: string;
       noteToAll: string;
+      createdAt: Date;
     }
   }
 }

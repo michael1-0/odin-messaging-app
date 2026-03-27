@@ -8,11 +8,13 @@ type MeResponse = {
   email: string;
   username: string;
   noteToAll: string;
+  createdAt: string;
 };
 
 function Profile() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState<number | null>(null);
+  const [createdAt, setCreatedAt] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [noteToAll, setNoteToAll] = useState("");
@@ -48,6 +50,7 @@ function Profile() {
 
         setEmail(data.email ?? "");
         setUserId(data.id ?? null);
+        setCreatedAt(data.createdAt ?? null);
         setUsername(data.username ?? "");
         setNoteToAll(data.noteToAll ?? "");
       } catch {
@@ -63,6 +66,17 @@ function Profile() {
   async function copyIdToClipboard() {
     if (userId === null) return;
     await navigator.clipboard.writeText(String(userId));
+  }
+
+  function formatAccountDate(rawDate: string) {
+    const date = new Date(rawDate);
+    if (Number.isNaN(date.getTime())) return rawDate;
+
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
@@ -185,6 +199,11 @@ function Profile() {
                         click here
                       </button>{" "}
                       to copy and share your id.
+                    </p>
+                  )}
+                  {createdAt && (
+                    <p className="pt-1 text-right text-xs text-neutral-600">
+                      Account created on {formatAccountDate(createdAt)}
                     </p>
                   )}
                 </div>
