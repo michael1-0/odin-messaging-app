@@ -4,6 +4,7 @@ declare global {
       id: number;
       email: string;
       username: string;
+      noteToAll: string;
     }
   }
 }

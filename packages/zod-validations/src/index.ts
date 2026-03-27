@@ -27,9 +27,23 @@ const SignupSchema = LoginSchema.extend({
     .default(""),
 });
 
+const ProfileUpdateSchema = z.object({
+  username: z
+    .string("Username must be valid")
+    .trim()
+    .min(2, "Username must be at least 2 characters long")
+    .max(30, "Username must not exceed 30 characters long"),
+  noteToAll: z
+    .string("Note must be valid")
+    .trim()
+    .max(280, "Note to all must not exceed 280 characters long")
+    .default(""),
+});
+
 type LoginUser = z.infer<typeof LoginSchema>;
 type SignupUser = z.infer<typeof SignupSchema>;
+type ProfileUpdateUser = z.infer<typeof ProfileUpdateSchema>;
 
 export default z;
-export { LoginSchema, SignupSchema };
-export type { LoginUser, SignupUser };
+export { LoginSchema, SignupSchema, ProfileUpdateSchema };
+export type { LoginUser, SignupUser, ProfileUpdateUser };

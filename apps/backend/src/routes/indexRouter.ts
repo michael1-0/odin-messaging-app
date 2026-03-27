@@ -3,16 +3,29 @@ import type { Router as RouterType } from "express";
 
 import {
   getHealth,
+  getMe,
   postLogin,
   postSignup,
+  putMe,
 } from "../controllers/indexController.ts";
 import validate from "express-zod-safe";
-import { LoginSchema, SignupSchema } from "@repo/zod-validations";
+import {
+  LoginSchema,
+  ProfileUpdateSchema,
+  SignupSchema,
+} from "@repo/zod-validations";
 import requireAuth from "../middlewares/auth.ts";
 
 const indexRouter: RouterType = Router();
 
 indexRouter.get("/health", requireAuth, getHealth);
+indexRouter.get("/me", requireAuth, getMe);
+indexRouter.put(
+  "/me",
+  requireAuth,
+  validate({ body: ProfileUpdateSchema }),
+  putMe,
+);
 indexRouter.post("/sign-up", validate({ body: SignupSchema }), postSignup);
 indexRouter.post("/log-in", validate({ body: LoginSchema }), postLogin);
 

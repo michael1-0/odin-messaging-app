@@ -8,6 +8,7 @@ import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
+import Profile from "./pages/Profile.tsx";
 import { GuestRoute, ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 createRoot(document.getElementById("root")!).render(
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

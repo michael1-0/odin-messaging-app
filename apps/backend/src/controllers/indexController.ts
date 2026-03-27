@@ -1,7 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import type { LoginUser, SignupUser } from "@repo/zod-validations";
+import type {
+  LoginUser,
+  ProfileUpdateUser,
+  SignupUser,
+} from "@repo/zod-validations";
 import { prisma } from "../db/prisma.ts";
 import { AppError } from "../errors/AppError.ts";
 
@@ -73,4 +77,34 @@ async function postLogin(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { getHealth, postSignup, postLogin };
+function getMe(req: Request, res: Response) {
+  if (!req.user) {
+    throw new AppError("Unauthorized", 401);
+  }
+
+  return res.json(req.user);
+}
+
+async function putMe(req: Request, res: Response, next: NextFunction) {
+  const body = req.body as ProfileUpdateUser;
+  if (!req.user) {
+    return next(new AppError("Unauthorized", 401));
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        username: body.username,
+        noteToAll: body.noteToAll,
+      },
+      omit: { password: true },
+    });
+
+    return res.json(updatedUser);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export { getHealth, postSignup, postLogin, getMe, putMe };
