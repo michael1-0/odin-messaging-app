@@ -8,11 +8,11 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  username String @db.VarChar(30)
-  noteToAll String @default("") @db.VarChar(280)
-  password String @db.VarChar(60)
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @db.VarChar(30)
+  noteToAll String   @default("") @db.VarChar(280)
+  password  String   @db.VarChar(60)
   createdAt DateTime @default(now())
 
   @@map("users")
