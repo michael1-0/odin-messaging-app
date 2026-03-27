@@ -18,7 +18,10 @@ import requireAuth from "../middlewares/auth.ts";
 
 const indexRouter: RouterType = Router();
 
-indexRouter.get("/health", requireAuth, getHealth);
+indexRouter.get("/health", getHealth);
+indexRouter.post("/sign-up", validate({ body: SignupSchema }), postSignup);
+indexRouter.post("/log-in", validate({ body: LoginSchema }), postLogin);
+
 indexRouter.get("/me", requireAuth, getMe);
 indexRouter.put(
   "/me",
@@ -26,7 +29,5 @@ indexRouter.put(
   validate({ body: ProfileUpdateSchema }),
   putMe,
 );
-indexRouter.post("/sign-up", validate({ body: SignupSchema }), postSignup);
-indexRouter.post("/log-in", validate({ body: LoginSchema }), postLogin);
 
 export default indexRouter;

@@ -15,7 +15,7 @@ export function ProtectedRoute() {
 
     const checkToken = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}health`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
