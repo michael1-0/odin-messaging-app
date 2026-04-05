@@ -15,8 +15,11 @@ import {
   SignupSchema,
 } from "@repo/zod-validations";
 import requireAuth from "../middlewares/auth.ts";
+import roomRouter from "./roomRouter.ts";
 
 const indexRouter: RouterType = Router();
+
+indexRouter.use("/rooms", roomRouter);
 
 indexRouter.get("/health", getHealth);
 indexRouter.post("/sign-up", validate({ body: SignupSchema }), postSignup);

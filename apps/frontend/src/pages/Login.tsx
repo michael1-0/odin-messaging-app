@@ -29,7 +29,7 @@ function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Invalid credentials");
+        setError(data.error ?? "Invalid");
         return;
       }
 

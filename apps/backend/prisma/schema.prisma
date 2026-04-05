@@ -15,5 +15,45 @@ model User {
   password  String   @db.VarChar(60)
   createdAt DateTime @default(now())
 
+  // Self relations
+  roomsAsUser1 Room[] @relation("RoomUser1")
+  roomsAsUser2 Room[] @relation("RoomUser2")
+  roomsCreated Room[] @relation("RoomCreator")
+
+  messages Message[]
+
   @@map("users")
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user1Id     Int
+  user2Id     Int
+  createdById Int
+
+  user1     User      @relation("RoomUser1", fields: [user1Id], references: [id])
+  user2     User      @relation("RoomUser2", fields: [user2Id], references: [id])
+  createdBy User      @relation("RoomCreator", fields: [createdById], references: [id])
+  messages  Message[]
+
+  // Prevent duplicate rooms
+  @@unique([user1Id, user2Id])
+  @@map("rooms")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.VarChar(500)
+  createdAt DateTime @default(now())
+
+  roomId   Int
+  senderId Int
+
+  room   Room @relation(fields: [roomId], references: [id])
+  sender User @relation(fields: [senderId], references: [id])
+
+  @@map("messages")
 }
