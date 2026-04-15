@@ -13,11 +13,13 @@ type Chat = {
   user2: User;
 };
 
+type ChatActivityEvent = CustomEvent<{ roomId: number }>;
+
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  const currentUserId = Number(localStorage.getItem("userId"));
 
   const [chats, setChats] = useState<Array<Chat>>([]);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
@@ -46,16 +48,13 @@ function Sidebar() {
   useEffect(() => {
     (async function fetchRoomsByUserId() {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}rooms/${userId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
+        const res = await fetch(`${import.meta.env.VITE_API_URL}rooms`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const data = await res.json();
 
         setChats(data);
@@ -63,7 +62,39 @@ function Sidebar() {
         setError("There was an error trying to fetch rooms");
       }
     })();
-  }, [token, userId]);
+  }, [token]);
+
+  useEffect(() => {
+    function handleChatActivity(event: Event) {
+      const chatActivityEvent = event as ChatActivityEvent;
+      const roomId = chatActivityEvent.detail?.roomId;
+
+      if (!roomId) {
+        return;
+      }
+
+      setChats((prevChats) => {
+        const chatIndex = prevChats.findIndex((chat) => chat.id === roomId);
+
+        if (chatIndex <= 0) {
+          return prevChats;
+        }
+
+        const targetChat = prevChats[chatIndex];
+        return [
+          targetChat,
+          ...prevChats.slice(0, chatIndex),
+          ...prevChats.slice(chatIndex + 1),
+        ];
+      });
+    }
+
+    window.addEventListener("chat:activity", handleChatActivity);
+
+    return () => {
+      window.removeEventListener("chat:activity", handleChatActivity);
+    };
+  }, []);
 
   async function handleFormSubmit(e: React.SubmitEvent<HTMLElement>) {
     e.preventDefault();
@@ -82,8 +113,6 @@ function Sidebar() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          creatorId: Number(userId),
-          user1Id: Number(userId),
           user2Id: Number(userIdAdd),
         }),
       });
@@ -96,7 +125,8 @@ function Sidebar() {
 
       console.log(data);
 
-      setChats([...chats, data]);
+      setChats((prevChats) => [data, ...prevChats]);
+      setIsChatModalOpen(false);
       navigate(`/chats/${data.id}`);
     } catch {
       setError("There was an error trying to add user");
@@ -105,8 +135,20 @@ function Sidebar() {
     }
   }
 
+  function checkChatWithCurrentUserId(chat: Chat, currentUserId: number) {
+    const checked = currentUserId === chat.user1.id ? chat.user2 : chat.user1;
+    return `${checked.username} #${checked.id}`;
+  }
+
+  function modalReset() {
+    setError("");
+    setUserIdAdd("");
+    setIsChatModalOpen(false);
+  }
+
   const isProfile = location.pathname === "/profile";
   const isHome = location.pathname === "/";
+  const isUsers = location.pathname === "/users";
 
   return (
     <>
@@ -142,6 +184,16 @@ function Sidebar() {
             >
               Global Chat
             </button>
+            <button
+              onClick={() => navigate("/users")}
+              className={`w-full text-left text-sm px-3 py-2 border-l-2 transition-colors cursor-pointer ${
+                isUsers
+                  ? "border-black bg-transparent text-black font-semibold"
+                  : "border-transparent bg-transparent text-neutral-600 hover:text-black hover:border-neutral-400"
+              }`}
+            >
+              Users
+            </button>
           </div>
 
           <div className="space-y-2">
@@ -156,23 +208,16 @@ function Sidebar() {
                 Add New Chat
               </button>
             </div>
-            {chats.length > 0 ? (
+            {chats.length > 0 &&
               chats.map((chat: Chat) => (
                 <button
                   key={chat.id}
-                  className="w-full text-left text-sm px-3 py-2 rounded bg-white border border-neutral-200 hover:bg-neutral-100 transition-colors cursor-pointer"
+                  className="w-full text-left px-4 py-2 rounded hover:bg-neutral-100 transition-colors cursor-pointer"
                   onClick={() => navigate(`/chats/${chat.id}`)}
                 >
-                  {chat.user1.id === chat.createdBy.id
-                    ? `${chat.user2.username} #${chat.user2.id}`
-                    : `${chat.user1.username} #${chat.user1.id}`}
+                  {checkChatWithCurrentUserId(chat, currentUserId)}
                 </button>
-              ))
-            ) : (
-              <div className="text-xs text-center text-neutral-500 mt-20">
-                You don't seem to have any chats
-              </div>
-            )}
+              ))}
           </div>
         </nav>
       </aside>
@@ -205,7 +250,7 @@ function Sidebar() {
                   {loading ? "Adding user..." : "Add"}
                 </button>
                 <button
-                  onClick={() => setIsChatModalOpen(false)}
+                  onClick={() => modalReset()}
                   className="px-3 py-2 text-sm rounded border border-neutral-300 hover:bg-neutral-100 transition-colors cursor-pointer"
                 >
                   Close

@@ -10,6 +10,8 @@ import Login from "./pages/Login.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Profile from "./pages/Profile.tsx";
 import { GuestRoute, ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import ChatRoom from "./pages/ChatRoom.tsx";
+import Users from "./pages/Users.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,6 +25,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="users" element={<Users />} />
+            <Route path="chats/:roomId" element={<ChatRoom />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

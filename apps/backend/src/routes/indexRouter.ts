@@ -4,6 +4,7 @@ import type { Router as RouterType } from "express";
 import {
   getHealth,
   getMe,
+  getUsers,
   postLogin,
   postSignup,
   putMe,
@@ -26,6 +27,7 @@ indexRouter.post("/sign-up", validate({ body: SignupSchema }), postSignup);
 indexRouter.post("/log-in", validate({ body: LoginSchema }), postLogin);
 
 indexRouter.get("/me", requireAuth, getMe);
+indexRouter.get("/users", requireAuth, getUsers);
 indexRouter.put(
   "/me",
   requireAuth,

@@ -6,8 +6,8 @@ async function postRoom(req: Request, res: Response, next: NextFunction) {
   try {
     const body = req.body;
     // Sort to make sure there exists only one order
-    const [user1Id, user2Id] = [body.user1Id, body.user2Id].sort();
-    const creatorId = body.creatorId;
+    const [user1Id, user2Id] = [req.user!.id, body.user2Id].sort();
+    const creatorId = req.user!.id;
 
     if (user1Id === user2Id) {
       throw new AppError("Can't add yourself bro", 400);
@@ -42,11 +42,6 @@ async function postRoom(req: Request, res: Response, next: NextFunction) {
 
 async function getRoomsById(req: Request, res: Response, next: NextFunction) {
   try {
-    const creatorId = Number(req.params.creatorId);
-    if (!creatorId) {
-      throw new AppError("Invalid or no user found with that id", 404);
-    }
-
     const rooms = await prisma.room.findMany({
       select: {
         id: true,
@@ -55,7 +50,7 @@ async function getRoomsById(req: Request, res: Response, next: NextFunction) {
         user2: { select: { id: true, username: true } },
       },
       orderBy: { updatedAt: "desc" },
-      where: { createdById: creatorId },
+      where: { OR: [{ user1Id: req.user!.id }, { user2Id: req.user!.id }] },
     });
 
     return res.status(200).json(rooms);

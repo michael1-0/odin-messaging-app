@@ -85,6 +85,28 @@ function getMe(req: Request, res: Response) {
   return res.json(req.user);
 }
 
+async function getUsers(req: Request, res: Response, next: NextFunction) {
+  if (!req.user) {
+    return next(new AppError("Unauthorized", 401));
+  }
+
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: { id: "asc" },
+      select: {
+        id: true,
+        username: true,
+        noteToAll: true,
+        createdAt: true,
+      },
+    });
+
+    return res.json(users);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function putMe(req: Request, res: Response, next: NextFunction) {
   const body = req.body as ProfileUpdateUser;
   if (!req.user) {
@@ -107,4 +129,4 @@ async function putMe(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { getHealth, postSignup, postLogin, getMe, putMe };
+export { getHealth, postSignup, postLogin, getMe, getUsers, putMe };

@@ -40,10 +40,19 @@ const ProfileUpdateSchema = z.object({
     .default(""),
 });
 
+const MessageSchema = z.object({
+  content: z
+    .string("Message must be valid")
+    .trim()
+    .min(1, "Message must be at least 1 character long")
+    .max(500, "Message must not exceed 500 characters long"),
+});
+
 type LoginUser = z.infer<typeof LoginSchema>;
 type SignupUser = z.infer<typeof SignupSchema>;
 type ProfileUpdateUser = z.infer<typeof ProfileUpdateSchema>;
+type MessageUser = z.infer<typeof MessageSchema>;
 
 export default z;
-export { LoginSchema, SignupSchema, ProfileUpdateSchema };
-export type { LoginUser, SignupUser, ProfileUpdateUser };
+export { LoginSchema, SignupSchema, ProfileUpdateSchema, MessageSchema };
+export type { LoginUser, SignupUser, ProfileUpdateUser, MessageUser };

@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Sidebar from "../components/Sidebar";
-
-type Message = {
-  userId: number;
-  username?: string;
-  content: string;
-};
+import type { Message } from "../types";
 
 function Home() {
   const currentUserId = Number(localStorage.getItem("userId"));
