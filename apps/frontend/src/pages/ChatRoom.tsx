@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import Sidebar from "../components/Sidebar";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import type { Message } from "../types";
@@ -101,15 +100,15 @@ function ChatRoom() {
   }
 
   return (
-    <div className="flex w-full h-screen bg-gray-50">
-      <div className="flex flex-1 flex-col">
+    <div className="flex w-full h-dvh bg-gray-50 overflow-x-hidden">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Chat Header */}
-        <header className="flex h-16 items-center px-6">
+        <header className="flex h-16 items-center justify-between px-3 sm:px-6">
           <h2 className="text-xl font-semibold">Room {`#${params.roomId}`}</h2>
         </header>
 
         {/* Message List */}
-        <main className="flex-1 overflow-y-auto p-6 space-y-4">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 min-w-0">
           {isLoadingMessages && (
             <p className="text-sm text-neutral-500">Loading messages...</p>
           )}
@@ -124,16 +123,18 @@ function ChatRoom() {
                   <div
                     className={
                       isMyMessage
-                        ? "self-end rounded-lg bg-blue-500 text-white p-3 max-w-[70%]"
-                        : "self-start rounded-lg bg-gray-200 p-3 max-w-[70%]"
+                        ? "self-end rounded-lg bg-blue-500 text-white p-2.5 sm:p-3 max-w-[92%] sm:max-w-[70%] min-w-0 overflow-hidden"
+                        : "self-start rounded-lg bg-gray-200 p-2.5 sm:p-3 max-w-[92%] sm:max-w-[70%] min-w-0 overflow-hidden"
                     }
                     key={index}
                   >
-                    <p className="text-xs font-semibold">
+                    <p className="text-xs font-semibold wrap-anywhere">
                       {(message.username ?? "User") +
                         ` with an id of ${message.userId}`}
                     </p>
-                    <p className="text-base">{message.content}</p>
+                    <p className="text-base wrap-anywhere whitespace-pre-wrap">
+                      {message.content}
+                    </p>
                   </div>
                 );
               })}
@@ -141,9 +142,9 @@ function ChatRoom() {
         </main>
 
         {/* Message Input Form */}
-        <footer className="border-t border-neutral-200 bg-white p-4">
+        <footer className="border-t border-neutral-200 bg-white p-2 sm:p-4">
           <form
-            className="flex space-x-2"
+            className="flex min-w-0 gap-2"
             onSubmit={(e) => handleMessageSubmit(e)}
           >
             <input
@@ -151,18 +152,17 @@ function ChatRoom() {
               placeholder="Type your message..."
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="min-w-0 flex-1 rounded-lg border border-gray-300 px-3 sm:px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
             <button
               type="submit"
-              className="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="shrink-0 rounded-lg bg-blue-600 px-4 sm:px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Send
             </button>
           </form>
         </footer>
       </div>
-      <Sidebar />
     </div>
   );
 }

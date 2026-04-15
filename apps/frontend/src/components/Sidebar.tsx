@@ -152,7 +152,7 @@ function Sidebar() {
 
   return (
     <>
-      <aside className="w-64 border-l border-neutral-200 bg-neutral-50 p-4 shrink-0 flex flex-col">
+      <aside className="h-full w-64 border-l border-neutral-200 bg-neutral-50 p-4 shrink-0 flex flex-col overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="font-semibold text-md">odin-messaging-app</h2>
           <button
@@ -165,16 +165,6 @@ function Sidebar() {
         <nav className="flex-1 flex flex-col gap-6">
           <div className="space-y-2">
             <button
-              onClick={() => navigate("/profile")}
-              className={`w-full text-left text-sm px-3 py-2 border-l-2 transition-colors cursor-pointer ${
-                isProfile
-                  ? "border-black bg-transparent text-black font-semibold"
-                  : "border-transparent bg-transparent text-neutral-600 hover:text-black hover:border-neutral-400"
-              }`}
-            >
-              Profile
-            </button>
-            <button
               onClick={() => navigate("/")}
               className={`w-full text-left text-sm px-3 py-2 border-l-2 transition-colors cursor-pointer ${
                 isHome
@@ -183,6 +173,16 @@ function Sidebar() {
               }`}
             >
               Global Chat
+            </button>
+            <button
+              onClick={() => navigate("/profile")}
+              className={`w-full text-left text-sm px-3 py-2 border-l-2 transition-colors cursor-pointer ${
+                isProfile
+                  ? "border-black bg-transparent text-black font-semibold"
+                  : "border-transparent bg-transparent text-neutral-600 hover:text-black hover:border-neutral-400"
+              }`}
+            >
+              Profile
             </button>
             <button
               onClick={() => navigate("/users")}

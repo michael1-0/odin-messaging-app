@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { io, Socket } from "socket.io-client";
-import Sidebar from "../components/Sidebar";
 
 type UsersResponse = {
   id: number;
@@ -144,7 +143,6 @@ function Users() {
           </div>
         </div>
       </main>
-      <Sidebar />
     </div>
   );
 }

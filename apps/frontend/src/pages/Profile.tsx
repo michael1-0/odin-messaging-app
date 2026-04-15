@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ProfileUpdateSchema } from "@repo/zod-validations";
-import Sidebar from "../components/Sidebar";
 
 type MeResponse = {
   id: number;
@@ -222,7 +221,6 @@ function Profile() {
           </div>
         </div>
       </main>
-      <Sidebar />
     </div>
   );
 }
