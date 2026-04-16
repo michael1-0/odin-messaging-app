@@ -1,11 +1,26 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 
+const API_WARMUP_KEY = "api-warmed";
+
+function warmUpApiOnce() {
+  if (sessionStorage.getItem(API_WARMUP_KEY)) {
+    return;
+  }
+
+  sessionStorage.setItem(API_WARMUP_KEY, "1");
+  void fetch(`${import.meta.env.VITE_API_URL}health`).catch(() => {
+    // warm-up is best-effort and should not block route rendering
+  });
+}
+
 export function ProtectedRoute() {
   const [isValidating, setIsValidating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    warmUpApiOnce();
+
     const token = localStorage.getItem("token");
     if (!token) {
       setIsAuthenticated(false);
@@ -49,6 +64,10 @@ export function ProtectedRoute() {
 }
 
 export function GuestRoute() {
+  useEffect(() => {
+    warmUpApiOnce();
+  }, []);
+
   return localStorage.getItem("token") ? (
     <Navigate to="/" replace />
   ) : (

@@ -9,8 +9,19 @@ import type {
 import { prisma } from "../db/prisma.ts";
 import { AppError } from "../errors/AppError.ts";
 
-function getHealth(req: Request, res: Response) {
-  res.json({ status: "ok" });
+async function getHealth(req: Request, res: Response, next: NextFunction) {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+
+    return res.json({
+      status: "ok",
+      db: "up",
+      timestamp: new Date().toISOString(),
+      uptimeSeconds: Math.floor(process.uptime()),
+    });
+  } catch (error) {
+    return next(error);
+  }
 }
 
 async function postSignup(req: Request, res: Response, next: NextFunction) {
