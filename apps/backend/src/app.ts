@@ -8,7 +8,7 @@ import { errorHandler, notFound } from "./middlewares/errorHandler.ts";
 const app: Express = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: [process.env.CLIENT_URL!], credentials: true }));
 
 app.use("/api", indexRouter);
 
