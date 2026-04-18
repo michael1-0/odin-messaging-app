@@ -121,7 +121,7 @@ function Profile() {
   }
 
   return (
-    <div className="flex w-full h-screen bg-gray-50">
+    <div className="flex w-full min-h-dvh bg-gray-50">
       <main className="flex flex-1 items-center justify-center overflow-y-auto p-6">
         <div className="w-full max-w-2xl">
           <h1 className="text-2xl font-semibold mb-6">Profile</h1>

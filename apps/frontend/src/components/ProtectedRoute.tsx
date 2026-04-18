@@ -54,7 +54,7 @@ export function ProtectedRoute() {
 
   if (isValidating) {
     return (
-      <div className="flex flex-1 items-center justify-center h-screen">
+      <div className="flex flex-1 items-center justify-center min-h-dvh">
         <p className="opacity-70">Loading...</p>
       </div>
     );

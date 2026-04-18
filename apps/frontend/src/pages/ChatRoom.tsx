@@ -142,7 +142,7 @@ function ChatRoom() {
         </main>
 
         {/* Message Input Form */}
-        <footer className="border-t border-neutral-200 bg-white p-2 sm:p-4">
+        <footer className="border-t border-neutral-200 bg-white p-2">
           <form
             className="flex min-w-0 gap-2"
             onSubmit={(e) => handleMessageSubmit(e)}

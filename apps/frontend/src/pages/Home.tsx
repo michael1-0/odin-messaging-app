@@ -30,7 +30,7 @@ function Home() {
   }
 
   return (
-    <div className="flex w-full h-screen bg-gray-50">
+    <div className="flex w-full min-h-dvh bg-gray-50">
       <div className="flex flex-1 flex-col">
         {/* Chat Header */}
         <header className="flex h-16 items-center px-6">
@@ -63,7 +63,7 @@ function Home() {
         </main>
 
         {/* Message Input Form */}
-        <footer className="border-t border-neutral-200 bg-white p-4">
+        <footer className="border-t border-neutral-200 bg-white p-2">
           <form
             className="flex space-x-2"
             onSubmit={(e) => handleMessageSubmit(e)}
