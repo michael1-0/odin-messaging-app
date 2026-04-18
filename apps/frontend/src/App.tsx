@@ -33,7 +33,7 @@ function App() {
           aria-label="Open sidebar"
           aria-expanded={isSidebarOpen}
         >
-          <span className="text-lg leading-none">☰</span>
+          <span className="text-lg leading-none bg-gray-50 rounded-lg p-2 mr-2">☰</span>
         </button>
       )}
 

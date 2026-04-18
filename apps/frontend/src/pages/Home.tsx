@@ -33,7 +33,7 @@ function Home() {
     <div className="flex w-full min-h-dvh bg-gray-50">
       <div className="flex flex-1 flex-col">
         {/* Chat Header */}
-        <header className="flex h-16 items-center px-6">
+        <header className="flex h-16 items-center px-6 pt-2">
           <h2 className="text-xl font-semibold">Global Chat</h2>
         </header>
 
