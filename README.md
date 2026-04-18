@@ -1,77 +1,81 @@
-# monorepo-template
+# odin-messaging-app
 
-A minimal full-stack monorepo template using `pnpm` workspaces.
+This is a project submission for The Odin Project NodeJS Course, Project: Messaging App.
 
-## Stack
+This is a full-stack real-time messaging application built as a pnpm monorepo. Users can sign up, log in, create chat rooms, join rooms, and exchange messages in real-time. Authentication and authorization are handled on the backend using Passport, JWT, and Socket.IO middleware.
 
-- Frontend: React + Vite + TypeScript, with React Router for routing
-- Backend: Express + TypeScript
-- Database: Prisma + PostgreSQL
-- Tooling: shared ESLint, Prettier, and TypeScript configs
+## Tech Stack
 
-## Workspace Layout
+- **Frontend:** React 19, Vite 7, React Router 7, Tailwind CSS 4
+- **Backend:** Node.js, Express 5, TypeScript, JWT, Passport.js, Socket.IO
+- **Database:** PostgreSQL via Prisma ORM
+- **Tooling:** pnpm workspaces, ESLint, Prettier
+
+## Monorepo Structure
 
 ```text
 apps/
-  backend/    # Express API + Prisma
-  frontend/   # React app (Vite)
-packages/
-  eslint-config/
-  prettier-config/
-  typescript-config/
+	backend/    # API server & WebSocket backend
+	frontend/   # React Single Page Application (SPA)
+packages/       # Shared configurations & code
 ```
 
 ## Prerequisites
 
-- Node.js 20+
-- pnpm 10+
+- Node.js
+- pnpm
 - PostgreSQL
 
-## Getting Started
+## Installation
 
-Install dependencies from the repository root:
+From the repo root:
 
 ```bash
 pnpm install
 ```
 
-Create a backend env file at `apps/backend/.env`:
+## Environment Variables
+
+### Backend (`apps/backend/.env`)
+
+Create a `.env` file in the `apps/backend` directory:
 
 ```env
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
-PORT=5000
+JWT_SECRET=replace-with-a-long-random-secret
 ```
 
-Apply Prisma migrations:
+### Frontend (`apps/frontend/.env`)
+
+Create a `.env` file in the `apps/frontend` directory. `VITE_API_URL` should point to your backend url.
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+## Database Setup
 
 ```bash
 pnpm --filter backend exec prisma migrate dev
 ```
 
-Run the full monorepo in development mode:
+This applies migrations to your database and generates the Prisma client used by the backend.
+
+## Run Locally
+
+From the repo root, run both frontend and backend development servers simultaneously:
 
 ```bash
 pnpm dev
 ```
 
-## Root Scripts
+This starts both apps in watch mode by leveraging the monorepo dev script.
 
-- `pnpm dev` — run all workspace `dev` scripts
-- `pnpm dev:backend` — run only backend in watch mode
-- `pnpm dev:frontend` — run only frontend
-- `pnpm build` — build all workspaces
-- `pnpm lint` — lint all workspaces
-- `pnpm format` — format all workspaces
-- `pnpm test` — run tests where available
-- `pnpm start` — run backend production build
-- `pnpm preview` — preview frontend production build
+## Available Scripts (root)
 
-## Contributing
-
-Contributions are welcome.
-
-## Notes
-
-- Prisma client output is generated under `apps/backend/src/db/generated/prisma/`.
-- Shared config packages are consumed by apps via workspace dependencies.
-- This repository is intended as a starting point; replace app code, add or remove dependencies with your project domain logic.
+- `pnpm dev` - run all workspace dev scripts
+- `pnpm build` - build all workspaces
+- `pnpm lint` - lint all workspaces
+- `pnpm format` - format all workspaces
+- `pnpm preview` - preview frontend production build
+- `pnpm start` - start backend production build
